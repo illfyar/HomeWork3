@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,11 +8,21 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using WpfTestMailSender.VVMLogWindows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using TabControl = System.Windows.Controls.TabControl;
+using System.Collections.ObjectModel;
+using WpfTestMailSender.VVMMailSender;
 
 namespace WpfTestMailSender
 {
     class VMMailSender : INotifyPropertyChanged
     {
+        ModelMailSender ModelMailSender { get; set; }
+        private ObservableCollection<Email> emails;
+        public ObservableCollection<Email> Emails { get; set; }
+        private ObservableCollection<Email> recipientList;
+        public ObservableCollection<Email> RecipientList { get; set; }
         private string log;
         public string Log
         {
@@ -53,6 +62,8 @@ namespace WpfTestMailSender
         {
             Letter = new Letter();
             Settings = new Settings();
+            this.ModelMailSender = new ModelMailSender();
+            Emails = ModelMailSender.GetEmails();
         }
 
         #region Commands
@@ -77,8 +88,7 @@ namespace WpfTestMailSender
             catch (Exception ex)
             {
                 Log = ex.Message + Environment.NewLine + ex.InnerException;
-            }
-            
+            }            
         }
         #endregion
         #region Save
@@ -176,12 +186,71 @@ namespace WpfTestMailSender
             }
         }
         #endregion
+        #region NextTab
+        private MyCommands nextTab;
+        public MyCommands NextTab
+        {
+            get
+            {
+                return nextTab ?? (nextTab = new MyCommands(NextTabTurn));
+            }
+        }
+        private void NextTabTurn(Object obj)
+        {
+            if (obj is TabControl)
+            {
+                TabControl tab = (TabControl)obj;
+                if (tab.SelectedIndex == tab.Items.Count-1)
+                {
+                    tab.SelectedIndex = 0;
+                }else
+                tab.SelectedIndex++;
+            }
+        }
+        #endregion
+        #region PrevTab
+        private MyCommands prevTab;
+        public MyCommands PrevTab
+        {
+            get
+            {
+                return prevTab ?? (prevTab = new MyCommands(PrevTabTurn));
+            }
+        }
+        private void PrevTabTurn(Object obj)
+        {
+            if (obj is TabControl)
+            {
+                TabControl tab = (TabControl)obj;
+                if (tab.SelectedIndex == 0)
+                {
+                    tab.SelectedIndex = tab.Items.Count - 1;
+                }
+                else
+                    tab.SelectedIndex--;
+            }
+        }
+        #endregion
+        #region AddRecipient
+        private MyCommands addRecipient;
+        public MyCommands AddRecipient
+        {
+            get
+            {
+                return addRecipient ?? (addRecipient = new MyCommands(AddRecipientMethod));
+            }
+        }
+        private void AddRecipientMethod(Object obj)
+        {
+            RecipientList.Add(new )
+        }
+        #endregion
         #endregion
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
+        }         
     }
 }

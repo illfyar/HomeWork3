@@ -1,0 +1,13 @@
+D:\cSharp\HomeWork3\TabSwitcher\bin\Debug\TabSwitcher.dll
+D:\cSharp\HomeWork3\TabSwitcher\bin\Debug\TabSwitcher.pdb
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\TabSwitcher.csprojAssemblyReference.cache
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\UserControl1.g.cs
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\TabSwitcher_MarkupCompile.cache
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\TabSwitcher_MarkupCompile.lref
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\UserControl1.baml
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\TabSwitcher.g.resources
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\TabSwitcher.Properties.Resources.resources
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\TabSwitcher.csproj.GenerateResource.cache
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\TabSwitcher.csproj.CoreCompileInputs.cache
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\TabSwitcher.dll
+D:\cSharp\HomeWork3\TabSwitcher\obj\Debug\TabSwitcher.pdb

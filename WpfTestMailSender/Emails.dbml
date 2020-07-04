@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="MailsAndSenders" Class="EmailsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=MailsAndSenders;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False" SettingsObjectName="WpfTestMailSender.Properties.Settings" SettingsPropertyName="MailsAndSendersConnectionString3" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Email" Member="Email">
+    <Type Name="Email">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Adress" Type="System.String" DbType="NChar(100)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NChar(100)" CanBeNull="true" />
+      <Association Name="Email_Mass_Send" Member="Mass_Send" ThisKey="Id" OtherKey="id_Email" Type="Mass_Send" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Mass_Send" Member="Mass_Send">
+    <Type Name="Mass_Send">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="id_Email" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="id_Message" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Date_Send" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Email_Mass_Send" Member="Email" ThisKey="id_Email" OtherKey="Id" Type="Email" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Message_Mass_Send" Member="Message" ThisKey="id_Message" OtherKey="id" Type="Message" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Message" Member="Message">
+    <Type Name="Message">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="NText" CanBeNull="true" UpdateCheck="Never" />
+      <Association Name="Message_Mass_Send" Member="Mass_Send" ThisKey="id" OtherKey="id_Message" Type="Mass_Send" />
+    </Type>
+  </Table>
+</Database>

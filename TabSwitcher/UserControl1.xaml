@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="TabSwitcher.TabSwitcherControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TabSwitcher"
+             mc:Ignorable="d"              
+    d:DesignHeight="55" d:DesignWidth="102" Background="White">
+    <UserControl.Resources>
+        <Style x:Key="ButtonStyle">
+            <Setter Property="Control.Width" Value="50"/>
+            <Setter Property="Control.Background" Value="#FF333333"/>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Orientation="Horizontal">
+        <Button x:Name="BtnPrev" Style="{StaticResource ButtonStyle}" Margin="0,0,2,0" 
+                ToolTip="Предыдущая вкладка" Click="BtnPrev_Click" >
+            <Button.Content>
+                <Image Source="images/left.png"/>
+            </Button.Content>
+        </Button>
+        <Button x:Name="BtnNext" Style="{StaticResource ButtonStyle}" ToolTip="Следующая вкладка" Click="BtnNext_Click">
+            <Button.Content>
+                <Image Source="images/right.png"/>
+            </Button.Content>
+        </Button>        
+    </StackPanel>
+</UserControl>
