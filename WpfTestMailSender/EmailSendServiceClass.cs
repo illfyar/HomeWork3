@@ -12,14 +12,28 @@ namespace WpfTestMailSender
     {
         public static void Send(Letter letter, Settings settings)
         {
-            MailMessage mailMessage = GetMailMessage(letter);
-            mailMessage.IsBodyHtml = false;
-            SmtpClient smtpClient = GetSmtpClient(settings);
-            smtpClient.Send(mailMessage);
+            if (letter.MassSend)
+            {
+                foreach (string Recipient in letter.RecipientAdressList)
+                {
+                SendLetter(Recipient);
+                }
+            }
+            else
+            {
+                SendLetter(letter.RecipientAdress);
+            }
+            void SendLetter(string Recipient)
+            {
+                MailMessage mailMessage = GetMailMessage(letter, Recipient);
+                mailMessage.IsBodyHtml = false;
+                SmtpClient smtpClient = GetSmtpClient(settings);
+                smtpClient.Send(mailMessage);
+            }
         }
-        private static MailMessage GetMailMessage(Letter letter)
+        private static MailMessage GetMailMessage(Letter letter,string recipient)
         {
-            return new MailMessage(letter.SenderAdress, letter.RecipientAdress, letter.Subject, letter.BodyMessage);
+            return new MailMessage(letter.SenderAdress, recipient, letter.Subject, letter.BodyMessage);
         }
         private static SmtpClient GetSmtpClient(Settings settings)
         {

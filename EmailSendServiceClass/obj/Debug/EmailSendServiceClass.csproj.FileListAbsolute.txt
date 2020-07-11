@@ -1,0 +1,6 @@
+D:\cSharp\HomeWork3\EmailSendServiceClass\bin\Debug\EmailSendServiceClass.dll
+D:\cSharp\HomeWork3\EmailSendServiceClass\bin\Debug\EmailSendServiceClass.pdb
+D:\cSharp\HomeWork3\EmailSendServiceClass\obj\Debug\EmailSendServiceClass.csprojAssemblyReference.cache
+D:\cSharp\HomeWork3\EmailSendServiceClass\obj\Debug\EmailSendServiceClass.csproj.CoreCompileInputs.cache
+D:\cSharp\HomeWork3\EmailSendServiceClass\obj\Debug\EmailSendServiceClass.dll
+D:\cSharp\HomeWork3\EmailSendServiceClass\obj\Debug\EmailSendServiceClass.pdb

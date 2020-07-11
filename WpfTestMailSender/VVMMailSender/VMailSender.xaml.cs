@@ -20,10 +20,24 @@ namespace WpfTestMailSender
     /// </summary>
     public partial class MainWindow : Window
     {
+        VMMailSender VMMailSender { get; set; } = new VMMailSender();
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new VMMailSender();
+            DataContext = VMMailSender;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((ComboBox)sender).SelectedItem is Email)
+            {
+                VMMailSender.SelectedMass_Send.Email = (Email)((ComboBox)sender).SelectedItem;
+            }            
+        }
+
+        private void CBAdressMassSend_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

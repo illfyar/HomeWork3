@@ -11,8 +11,10 @@ using WpfTestMailSender.VVMLogWindows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using TabControl = System.Windows.Controls.TabControl;
+using MessageBox = System.Windows.Forms.MessageBox;
 using System.Collections.ObjectModel;
 using WpfTestMailSender.VVMMailSender;
+using System.Windows;
 
 namespace WpfTestMailSender
 {
@@ -21,8 +23,48 @@ namespace WpfTestMailSender
         ModelMailSender ModelMailSender { get; set; }
         private ObservableCollection<Email> emails;
         public ObservableCollection<Email> Emails { get; set; }
-        private ObservableCollection<Email> recipientList;
-        public ObservableCollection<Email> RecipientList { get; set; }
+        private ObservableCollection<Mass_Send> recipientList;
+        public ObservableCollection<Mass_Send> RecipientList { get; set; } = new ObservableCollection<Mass_Send>();
+        public Message Message { get; set; } = new Message();
+        private string msTBTime;
+        public string MsTBTime { get { return msTBTime; } 
+            set
+            {
+                msTBTime = value;
+                if (DateTime.TryParse(value, out DateTime Dt) && SelectedMass_Send != null)
+                {
+                    DateTime date_Send = SelectedMass_Send.Date_Send.Value;
+                    SelectedMass_Send.Date_Send = new DateTime
+                        (date_Send.Year, date_Send.Month, date_Send.Day, Dt.Hour, Dt.Minute, Dt.Second);
+                }
+
+            } }
+        private Mass_Send selectedMass_Send;
+        public Mass_Send SelectedMass_Send
+        {
+            get 
+            { 
+                return selectedMass_Send; 
+            }
+            set
+            {
+                selectedMass_Send = value;
+                OnPropertyChanged("selectedMass_Send");
+            }
+        }
+        private TabItem selectedTab;
+        public TabItem SelectedTab
+        {
+            get
+            {
+                return selectedTab;
+            }
+            set
+            {
+                selectedTab = value;
+                OnPropertyChanged("selectedMass_Send");
+            }
+        }
         private string log;
         public string Log
         {
@@ -65,7 +107,6 @@ namespace WpfTestMailSender
             this.ModelMailSender = new ModelMailSender();
             Emails = ModelMailSender.GetEmails();
         }
-
         #region Commands
         #region Send
         private MyCommands send;
@@ -79,11 +120,21 @@ namespace WpfTestMailSender
         {
             try
             {
-                if (obj is System.Windows.Controls.PasswordBox)
+                if (obj is System.Windows.Controls.PasswordBox pass)
                 {
-                    Settings.Password = ((System.Windows.Controls.PasswordBox)obj).Password;
+                    Settings.Password = pass.Password;
                 }
-                EmailSendServiceClass.Send(Letter,Settings);
+                if (SelectedTab.Name == "TabIMain")
+                {
+                    EmailSendServiceClass.Send(Letter, Settings);
+                }
+                else if(SelectedTab.Name == "TabIMassSend")
+                {
+                    Letter.MassSend = true;
+                    Letter.RecipientAdressList = RecipientList.Select<Mass_Send,string>(c => c.Email.Adress).ToList<string>();
+                    EmailSendServiceClass.Send(Letter, Settings);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -242,7 +293,56 @@ namespace WpfTestMailSender
         }
         private void AddRecipientMethod(Object obj)
         {
-            RecipientList.Add(new )
+            RecipientList.Add(new Mass_Send() { });
+        }
+        #endregion
+        #region SelectionChangedEmailCB
+        private MyCommands selectionChangedEmailCB;
+        public MyCommands SelectionChangedEmailCB
+        {
+            get
+            {
+                return selectionChangedEmailCB ?? (selectionChangedEmailCB = new MyCommands(selectionChangedEmailCBEvent));
+            }
+        }
+        private void selectionChangedEmailCBEvent(Object obj)
+        {
+            if (obj is Email email)
+            {
+                SelectedMass_Send.Email = email;
+                //SelectedMass_Send.Email.Adress = email.Adress;
+            }
+        }
+        #endregion
+        #region SelectedDataChanged
+        private MyCommands selectedDataChanged;
+        public MyCommands SelectedDataChanged
+        {
+            get
+            {
+                return selectedDataChanged ?? (selectedDataChanged = new MyCommands(SelectedDataChangedMethod));
+            }
+        }
+        private void SelectedDataChangedMethod(Object obj)
+        {
+            if (obj is DatePicker && SelectedMass_Send != null)
+            {
+                SelectedMass_Send.Date_Send = (DateTime)((DatePicker)obj).SelectedDate;
+            }
+        }
+        #endregion
+        #region AddMassSendsToPlane
+        private MyCommands addMassSendsToPlane;
+        public MyCommands AddMassSendsToPlane
+        {
+            get
+            {
+                return addMassSendsToPlane ?? (addMassSendsToPlane = new MyCommands(AddMassSendsToPlaneMethod));
+            }
+        }
+        private void AddMassSendsToPlaneMethod(Object obj)
+        {
+            ModelMailSender.InsertToMass_Send(RecipientList, Message);
         }
         #endregion
         #endregion
@@ -251,6 +351,6 @@ namespace WpfTestMailSender
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }         
+        }
     }
 }

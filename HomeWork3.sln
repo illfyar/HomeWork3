@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfTestMailSender", "WpfTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabSwitcher", "TabSwitcher\TabSwitcher.csproj", "{D74C996C-01B9-4D2D-A242-4375AA235589}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSendServiceClass", "EmailSendServiceClass\EmailSendServiceClass.csproj", "{F73EA4EB-B9D2-4E45-B982-751F523473C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D74C996C-01B9-4D2D-A242-4375AA235589}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D74C996C-01B9-4D2D-A242-4375AA235589}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D74C996C-01B9-4D2D-A242-4375AA235589}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F73EA4EB-B9D2-4E45-B982-751F523473C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F73EA4EB-B9D2-4E45-B982-751F523473C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F73EA4EB-B9D2-4E45-B982-751F523473C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F73EA4EB-B9D2-4E45-B982-751F523473C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
