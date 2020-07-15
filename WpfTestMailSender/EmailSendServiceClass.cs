@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -10,30 +11,19 @@ namespace WpfTestMailSender
 {
     static class EmailSendServiceClass
     {
-        public static void Send(Letter letter, Settings settings)
+        public static void Send(ObservableCollection<Letter> letters, Settings settings)
         {
-            if (letter.MassSend)
+            foreach (Letter letter in letters)
             {
-                foreach (string Recipient in letter.RecipientAdressList)
-                {
-                SendLetter(Recipient);
-                }
-            }
-            else
-            {
-                SendLetter(letter.RecipientAdress);
-            }
-            void SendLetter(string Recipient)
-            {
-                MailMessage mailMessage = GetMailMessage(letter, Recipient);
+                MailMessage mailMessage = GetMailMessage(letter);
                 mailMessage.IsBodyHtml = false;
                 SmtpClient smtpClient = GetSmtpClient(settings);
-                smtpClient.Send(mailMessage);
-            }
+                //smtpClient.Send(mailMessage); отправка не работает, порты у провайдера закрыты
+                }
         }
-        private static MailMessage GetMailMessage(Letter letter,string recipient)
+        private static MailMessage GetMailMessage(Letter letter)
         {
-            return new MailMessage(letter.SenderAdress, recipient, letter.Subject, letter.BodyMessage);
+            return new MailMessage(letter.SenderEmail.Adress, letter.RecipientEmail.Adress, letter.Message.subject, letter.Message.text);
         }
         private static SmtpClient GetSmtpClient(Settings settings)
         {

@@ -7,7 +7,7 @@
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:WpfTestMailSender" xmlns:TabSwitcher1="clr-namespace:TabSwitcher;assembly=TabSwitcher"
         mc:Ignorable="d"
-        Title="MainWindow" Height="474" Width="889" x:Name="MainWindowCP">
+        Title="MainWindow" Height="497" Width="889" x:Name="MainWindowCP">
     <Window.Resources>
         <Style x:Key="LabelStyle">
             <Setter Property="Control.HorizontalAlignment" Value="Right"/>
@@ -27,47 +27,113 @@
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
         <TabControl x:Name="TbCtrMain" SelectedItem="{Binding SelectedTab, Mode=OneWayToSource}">
-            <TabItem Header="Главная" x:Name="TabIMain">
+            <TabItem Header="Отправка писем" x:Name="TabILetters">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="38*"/>
+                        <ColumnDefinition Width="843*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="60"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="60"/>
-                        <ColumnDefinition Width="7*"/>
-                        <ColumnDefinition Width="114*"/>
-                    </Grid.ColumnDefinitions>
-                    <Menu Grid.Column="0" Grid.ColumnSpan="3">
-                        <MenuItem Name="SaveMI" Header="Сохранить письмо">
+                    <Menu Grid.ColumnSpan="2">
+                        <MenuItem Header="Добавить" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
-                                    <i:InvokeCommandAction Command="{Binding Save}" CommandParameter="Letter"/>
+                                    <i:InvokeCommandAction Command="{Binding AddRecipient}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </MenuItem>
-                        <MenuItem Header="Загрузить письмо">
+                        <MenuItem Header="Удалить" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Click">
-                                    <i:InvokeCommandAction Command="{Binding Load}"/>
+                                    <i:InvokeCommandAction Command="{Binding RemoveRecipient}" CommandParameter="Letter"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </MenuItem>
+                        <DatePicker x:Name="DtPickDateTimes" Height="30" FontSize="14">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedDateChanged">
+                                    <i:InvokeCommandAction Command="{Binding SelectedDataChanged}"
+                                        CommandParameter="{Binding ElementName = DtPickDateTimes}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </DatePicker>
+                        <xctk:MaskedTextBox x:Name="MaskTime" Text="{Binding MsTBTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Mask="00:00" FontSize="16" Margin="0,2" >
+                        </xctk:MaskedTextBox>
+                        <MenuItem Header="Запланировать рассылку" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:InvokeCommandAction Command="{Binding AddLettersToPlane}" CommandParameter="Letter"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </MenuItem>
                     </Menu>
-                    <Label Content="Кому: " Grid.Row="1" Style="{StaticResource LabelStyle}"/>
-                    <TextBox Name="RecipientAdress" Text="{Binding Letter.RecipientAdress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="1" Grid.Column="1" Height="auto" Style="{StaticResource TextBoxStyle}" Grid.ColumnSpan="2"/>
-                    <Label Content="От кого: "  Style="{StaticResource LabelStyle}" Grid.Row="2"/>
-                    <TextBox Name="SenderAdress" Text="{Binding Letter.SenderAdress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 Grid.Row="2" Grid.Column="1" Height="auto" Style="{StaticResource TextBoxStyle}" Grid.ColumnSpan="2"/>
-                    <Label Content="Тема: "  Style="{StaticResource LabelStyle}" Grid.Row="3"/>
-                    <TextBox Name="SubjectTB" Text="{Binding Letter.Subject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="3" Grid.Column="1" Height="auto" Style="{StaticResource TextBoxStyle}" Grid.ColumnSpan="2"/>
-                    <TextBox Name ="BodyMessageTB" Text="{Binding Letter.BodyMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource TextBoxStyle}" Height="auto"/>
+                    <DataGrid Grid.Row="1" x:Name="DtGrLetters" Background="{x:Null}" ItemsSource="{Binding Letters, Mode=TwoWay,
+                        UpdateSourceTrigger=PropertyChanged}"
+                            SelectedItem="{Binding SelectedLetter,  Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="False" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Имя" Width="240">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock 
+                                            Text="{Binding RecipientEmail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox x:Name="CBAdressLetters" 
+                                            Text="{Binding RecipientEmail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                            DisplayMemberPath="Name"
+                                            IsEditable="True"
+                                            ItemsSource="{Binding Path=DataContext.Emails, 
+                                            RelativeSource={RelativeSource AncestorType=DataGrid}}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged">
+                                                    <i:InvokeCommandAction Command="{Binding Path=DataContext.SelectionChangedEmailCB, 
+                                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                        CommandParameter="{Binding ElementName=CBAdressLetters, Path=SelectedItem}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Адрес" Width="280" Binding="{Binding RecipientEmail.Adress,Mode=TwoWay,
+                                UpdateSourceTrigger=PropertyChanged}"/>
+                            <DataGridTextColumn Header="Дата" Width="100" Binding="{Binding Date_Send,
+                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid Grid.Row="2" Width="auto" Grid.ColumnSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="55"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Label Content="От кого: "  Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" />
+                        <ComboBox Name="SenderAdressLetters" Width="300" Margin="3" 
+                                  ItemsSource="{Binding Emails}" Grid.Column="1" HorizontalAlignment="Left"
+                                  SelectedItem="{Binding SelectionSenderEmail}">
+                        <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>                  
+                        </ComboBox>
+                        <Label Content="Тема: " Grid.Row="1"  Style="{StaticResource LabelStyle}" HorizontalAlignment="Left" />
+                        <TextBox x:Name="TBSubject" Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBoxStyle}"
+                                 Text="{Binding Message.subject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <TextBox Name ="TBBodyMessageLetters" Text="{Binding Message.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="3" Style="{StaticResource TextBoxStyle}" Height="auto" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Настройки" x:Name="TabISettings">
@@ -112,98 +178,6 @@
                         <Label Content="Пароль: "/>
                         <PasswordBox Name="PasswordTB" Width="210" Style="{StaticResource TextBoxStyle}" HorizontalAlignment="Left" Height="25"/>
                     </StackPanel>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Массовая рассылка" x:Name="TabIMassSend">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="150"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>                
-                <Menu>
-                        <MenuItem Header="Добавить" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <i:InvokeCommandAction Command="{Binding AddRecipient}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </MenuItem>
-                        <MenuItem Header="Удалить" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <i:InvokeCommandAction Command="{Binding Save}" CommandParameter="Letter"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </MenuItem>
-                        <DatePicker x:Name="DtPickDateTimes" Height="30" FontSize="14" >
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectedDateChanged">
-                                    <i:InvokeCommandAction Command="{Binding SelectedDataChanged}"
-                                        CommandParameter="{Binding ElementName = DtPickDateTimes}"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </DatePicker>
-                        <xctk:MaskedTextBox x:Name="MaskTime" Text="{Binding MsTBTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Mask="00:00" FontSize="16" Margin="0,2" >
-                        </xctk:MaskedTextBox>
-                        <MenuItem Header="Запланировать рассылку" HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="Click">
-                                    <i:InvokeCommandAction Command="{Binding AddMassSendsToPlane}" CommandParameter="Letter"/>
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </MenuItem>
-                    </Menu>
-                    <DataGrid Grid.Row="1" x:Name="DtGrMassSend" Background="{x:Null}" ItemsSource="{Binding RecipientList, Mode=TwoWay,
-                        UpdateSourceTrigger=PropertyChanged}"
-                            SelectedItem="{Binding SelectedMass_Send,  Mode=TwoWay,
-                            UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="False">
-                        <DataGrid.Columns>                                
-                            <DataGridTemplateColumn Header="Имя" Width="240">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock 
-                                            Text="{Binding Email.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <ComboBox x:Name="CBAdressMassSend" 
-                                            Text="{Binding Email.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                                            DisplayMemberPath="Name"
-                                            IsEditable="True"
-                                            ItemsSource="{Binding Path=DataContext.Emails, 
-                                            RelativeSource={RelativeSource AncestorType=DataGrid}}">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="SelectionChanged">
-                                                    <i:InvokeCommandAction Command="{Binding Path=DataContext.SelectionChangedEmailCB, 
-                                                         RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                        CommandParameter="{Binding ElementName=CBAdressMassSend, Path=SelectedItem}"/>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </ComboBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>                                
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Адрес" Width="280" Binding="{Binding Email.Adress,Mode=TwoWay,
-                                UpdateSourceTrigger=PropertyChanged}"/>
-                            <DataGridTextColumn Header="Дата" Width="100" Binding="{Binding Date_Send,
-                                Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" Width="auto">
-                        <Label Content="От кого: "  Style="{StaticResource LabelStyle}" HorizontalAlignment="Center" />
-                        <ComboBox Name="SenderAdressMassSend" Width="300" Margin="3" ItemsSource="{Binding Emails}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>                            
-                        </ComboBox>
-                    </StackPanel>
-                    <TextBox Name ="TBBodyMessageMassSend" Text="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Grid.Row="3" Style="{StaticResource TextBoxStyle}" Height="auto"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Планировщик" x:Name="TabIPlanner">

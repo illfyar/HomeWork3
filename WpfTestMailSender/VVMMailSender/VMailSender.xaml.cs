@@ -27,17 +27,5 @@ namespace WpfTestMailSender
             DataContext = VMMailSender;
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (((ComboBox)sender).SelectedItem is Email)
-            {
-                VMMailSender.SelectedMass_Send.Email = (Email)((ComboBox)sender).SelectedItem;
-            }            
-        }
-
-        private void CBAdressMassSend_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }

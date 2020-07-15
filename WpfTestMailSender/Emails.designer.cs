@@ -33,9 +33,9 @@ namespace WpfTestMailSender
     partial void InsertEmail(Email instance);
     partial void UpdateEmail(Email instance);
     partial void DeleteEmail(Email instance);
-    partial void InsertMass_Send(Mass_Send instance);
-    partial void UpdateMass_Send(Mass_Send instance);
-    partial void DeleteMass_Send(Mass_Send instance);
+    partial void InsertLetter(Letter instance);
+    partial void UpdateLetter(Letter instance);
+    partial void DeleteLetter(Letter instance);
     partial void InsertMessage(Message instance);
     partial void UpdateMessage(Message instance);
     partial void DeleteMessage(Message instance);
@@ -79,11 +79,11 @@ namespace WpfTestMailSender
 			}
 		}
 		
-		public System.Data.Linq.Table<Mass_Send> Mass_Send
+		public System.Data.Linq.Table<Letter> Letter
 		{
 			get
 			{
-				return this.GetTable<Mass_Send>();
+				return this.GetTable<Letter>();
 			}
 		}
 		
@@ -108,7 +108,9 @@ namespace WpfTestMailSender
 		
 		private string _Name;
 		
-		private EntitySet<Mass_Send> _Mass_Send;
+		private EntitySet<Letter> _Letter;
+		
+		private EntitySet<Letter> _Letter1;
 		
     #region Определения метода расширяемости
     partial void OnLoaded();
@@ -124,7 +126,8 @@ namespace WpfTestMailSender
 		
 		public Email()
 		{
-			this._Mass_Send = new EntitySet<Mass_Send>(new Action<Mass_Send>(this.attach_Mass_Send), new Action<Mass_Send>(this.detach_Mass_Send));
+			this._Letter = new EntitySet<Letter>(new Action<Letter>(this.attach_Letter), new Action<Letter>(this.detach_Letter));
+			this._Letter1 = new EntitySet<Letter>(new Action<Letter>(this.attach_Letter1), new Action<Letter>(this.detach_Letter1));
 			OnCreated();
 		}
 		
@@ -188,16 +191,29 @@ namespace WpfTestMailSender
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Email_Mass_Send", Storage="_Mass_Send", ThisKey="Id", OtherKey="id_Email")]
-		public EntitySet<Mass_Send> Mass_Send
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Email_Letter", Storage="_Letter", ThisKey="Id", OtherKey="id_RecipientEmail")]
+		public EntitySet<Letter> Letter
 		{
 			get
 			{
-				return this._Mass_Send;
+				return this._Letter;
 			}
 			set
 			{
-				this._Mass_Send.Assign(value);
+				this._Letter.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Email_Letter1", Storage="_Letter1", ThisKey="Id", OtherKey="id_SenderEmail")]
+		public EntitySet<Letter> Letter1
+		{
+			get
+			{
+				return this._Letter1;
+			}
+			set
+			{
+				this._Letter1.Assign(value);
 			}
 		}
 		
@@ -221,34 +237,50 @@ namespace WpfTestMailSender
 			}
 		}
 		
-		private void attach_Mass_Send(Mass_Send entity)
+		private void attach_Letter(Letter entity)
 		{
 			this.SendPropertyChanging();
-			entity.Email = this;
+			entity.RecipientEmail = this;
 		}
 		
-		private void detach_Mass_Send(Mass_Send entity)
+		private void detach_Letter(Letter entity)
 		{
 			this.SendPropertyChanging();
-			entity.Email = null;
+			entity.RecipientEmail = null;
+		}
+		
+		private void attach_Letter1(Letter entity)
+		{
+			this.SendPropertyChanging();
+			entity.SenderEmail = this;
+		}
+		
+		private void detach_Letter1(Letter entity)
+		{
+			this.SendPropertyChanging();
+			entity.SenderEmail = null;
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Mass_Send")]
-	public partial class Mass_Send : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Letter")]
+	public partial class Letter : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _id;
 		
-		private int _id_Email;
+		private int _id_RecipientEmail;
 		
 		private int _id_Message;
 		
 		private System.Nullable<System.DateTime> _Date_Send;
 		
+		private int _id_SenderEmail;
+		
 		private EntityRef<Email> _Email;
+		
+		private EntityRef<Email> _Email1;
 		
 		private EntityRef<Message> _Message;
 		
@@ -258,17 +290,20 @@ namespace WpfTestMailSender
     partial void OnCreated();
     partial void OnidChanging(int value);
     partial void OnidChanged();
-    partial void Onid_EmailChanging(int value);
-    partial void Onid_EmailChanged();
+    partial void Onid_RecipientEmailChanging(int value);
+    partial void Onid_RecipientEmailChanged();
     partial void Onid_MessageChanging(int value);
     partial void Onid_MessageChanged();
     partial void OnDate_SendChanging(System.Nullable<System.DateTime> value);
     partial void OnDate_SendChanged();
+    partial void Onid_SenderEmailChanging(int value);
+    partial void Onid_SenderEmailChanged();
     #endregion
 		
-		public Mass_Send()
+		public Letter()
 		{
 			this._Email = default(EntityRef<Email>);
+			this._Email1 = default(EntityRef<Email>);
 			this._Message = default(EntityRef<Message>);
 			OnCreated();
 		}
@@ -293,26 +328,26 @@ namespace WpfTestMailSender
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_Email", DbType="Int NOT NULL", IsPrimaryKey=true)]
-		public int id_Email
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_RecipientEmail", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int id_RecipientEmail
 		{
 			get
 			{
-				return this._id_Email;
+				return this._id_RecipientEmail;
 			}
 			set
 			{
-				if ((this._id_Email != value))
+				if ((this._id_RecipientEmail != value))
 				{
 					if (this._Email.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
-					this.Onid_EmailChanging(value);
+					this.Onid_RecipientEmailChanging(value);
 					this.SendPropertyChanging();
-					this._id_Email = value;
-					this.SendPropertyChanged("id_Email");
-					this.Onid_EmailChanged();
+					this._id_RecipientEmail = value;
+					this.SendPropertyChanged("id_RecipientEmail");
+					this.Onid_RecipientEmailChanged();
 				}
 			}
 		}
@@ -361,8 +396,32 @@ namespace WpfTestMailSender
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Email_Mass_Send", Storage="_Email", ThisKey="id_Email", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
-		public Email Email
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_id_SenderEmail", DbType="Int NOT NULL")]
+		public int id_SenderEmail
+		{
+			get
+			{
+				return this._id_SenderEmail;
+			}
+			set
+			{
+				if ((this._id_SenderEmail != value))
+				{
+					if (this._Email1.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.Onid_SenderEmailChanging(value);
+					this.SendPropertyChanging();
+					this._id_SenderEmail = value;
+					this.SendPropertyChanged("id_SenderEmail");
+					this.Onid_SenderEmailChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Email_Letter", Storage="_Email", ThisKey="id_RecipientEmail", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public Email RecipientEmail
 		{
 			get
 			{
@@ -378,24 +437,58 @@ namespace WpfTestMailSender
 					if ((previousValue != null))
 					{
 						this._Email.Entity = null;
-						previousValue.Mass_Send.Remove(this);
+						previousValue.Letter.Remove(this);
 					}
 					this._Email.Entity = value;
 					if ((value != null))
 					{
-						value.Mass_Send.Add(this);
-						this._id_Email = value.Id;
+						value.Letter.Add(this);
+						this._id_RecipientEmail = value.Id;
 					}
 					else
 					{
-						this._id_Email = default(int);
+						this._id_RecipientEmail = default(int);
 					}
-					this.SendPropertyChanged("Email");
+					this.SendPropertyChanged("RecipientEmail");
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Message_Mass_Send", Storage="_Message", ThisKey="id_Message", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Email_Letter1", Storage="_Email1", ThisKey="id_SenderEmail", OtherKey="Id", IsForeignKey=true)]
+		public Email SenderEmail
+		{
+			get
+			{
+				return this._Email1.Entity;
+			}
+			set
+			{
+				Email previousValue = this._Email1.Entity;
+				if (((previousValue != value) 
+							|| (this._Email1.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Email1.Entity = null;
+						previousValue.Letter1.Remove(this);
+					}
+					this._Email1.Entity = value;
+					if ((value != null))
+					{
+						value.Letter1.Add(this);
+						this._id_SenderEmail = value.Id;
+					}
+					else
+					{
+						this._id_SenderEmail = default(int);
+					}
+					this.SendPropertyChanged("SenderEmail");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Message_Letter", Storage="_Message", ThisKey="id_Message", OtherKey="id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public Message Message
 		{
 			get
@@ -412,12 +505,12 @@ namespace WpfTestMailSender
 					if ((previousValue != null))
 					{
 						this._Message.Entity = null;
-						previousValue.Mass_Send.Remove(this);
+						previousValue.Letter.Remove(this);
 					}
 					this._Message.Entity = value;
 					if ((value != null))
 					{
-						value.Mass_Send.Add(this);
+						value.Letter.Add(this);
 						this._id_Message = value.id;
 					}
 					else
@@ -460,7 +553,9 @@ namespace WpfTestMailSender
 		
 		private string _text;
 		
-		private EntitySet<Mass_Send> _Mass_Send;
+		private string _subject;
+		
+		private EntitySet<Letter> _Letter;
 		
     #region Определения метода расширяемости
     partial void OnLoaded();
@@ -470,11 +565,13 @@ namespace WpfTestMailSender
     partial void OnidChanged();
     partial void OntextChanging(string value);
     partial void OntextChanged();
+    partial void OnsubjectChanging(string value);
+    partial void OnsubjectChanged();
     #endregion
 		
 		public Message()
 		{
-			this._Mass_Send = new EntitySet<Mass_Send>(new Action<Mass_Send>(this.attach_Mass_Send), new Action<Mass_Send>(this.detach_Mass_Send));
+			this._Letter = new EntitySet<Letter>(new Action<Letter>(this.attach_Letter), new Action<Letter>(this.detach_Letter));
 			OnCreated();
 		}
 		
@@ -518,16 +615,36 @@ namespace WpfTestMailSender
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Message_Mass_Send", Storage="_Mass_Send", ThisKey="id", OtherKey="id_Message")]
-		public EntitySet<Mass_Send> Mass_Send
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_subject", DbType="NText", UpdateCheck=UpdateCheck.Never)]
+		public string subject
 		{
 			get
 			{
-				return this._Mass_Send;
+				return this._subject;
 			}
 			set
 			{
-				this._Mass_Send.Assign(value);
+				if ((this._subject != value))
+				{
+					this.OnsubjectChanging(value);
+					this.SendPropertyChanging();
+					this._subject = value;
+					this.SendPropertyChanged("subject");
+					this.OnsubjectChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Message_Letter", Storage="_Letter", ThisKey="id", OtherKey="id_Message")]
+		public EntitySet<Letter> Letter
+		{
+			get
+			{
+				return this._Letter;
+			}
+			set
+			{
+				this._Letter.Assign(value);
 			}
 		}
 		
@@ -551,13 +668,13 @@ namespace WpfTestMailSender
 			}
 		}
 		
-		private void attach_Mass_Send(Mass_Send entity)
+		private void attach_Letter(Letter entity)
 		{
 			this.SendPropertyChanging();
 			entity.Message = this;
 		}
 		
-		private void detach_Mass_Send(Mass_Send entity)
+		private void detach_Letter(Letter entity)
 		{
 			this.SendPropertyChanging();
 			entity.Message = null;

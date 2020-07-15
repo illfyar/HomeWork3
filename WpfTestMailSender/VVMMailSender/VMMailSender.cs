@@ -20,36 +20,49 @@ namespace WpfTestMailSender
 {
     class VMMailSender : INotifyPropertyChanged
     {
-        ModelMailSender ModelMailSender { get; set; }
+        ModelMailSender ModelMailSender { get; set; } = new ModelMailSender();
         private ObservableCollection<Email> emails;
         public ObservableCollection<Email> Emails { get; set; }
-        private ObservableCollection<Mass_Send> recipientList;
-        public ObservableCollection<Mass_Send> RecipientList { get; set; } = new ObservableCollection<Mass_Send>();
+        private ObservableCollection<Letter> letters;
+        public ObservableCollection<Letter> Letters { get; set; } = new ObservableCollection<Letter>();
         public Message Message { get; set; } = new Message();
         private string msTBTime;
         public string MsTBTime { get { return msTBTime; } 
             set
             {
                 msTBTime = value;
-                if (DateTime.TryParse(value, out DateTime Dt) && SelectedMass_Send != null)
+                if (DateTime.TryParse(value, out DateTime Dt) && SelectedLetter != null)
                 {
-                    DateTime date_Send = SelectedMass_Send.Date_Send.Value;
-                    SelectedMass_Send.Date_Send = new DateTime
+                    DateTime date_Send = SelectedLetter.Date_Send.Value;
+                    SelectedLetter.Date_Send = new DateTime
                         (date_Send.Year, date_Send.Month, date_Send.Day, Dt.Hour, Dt.Minute, Dt.Second);
                 }
 
             } }
-        private Mass_Send selectedMass_Send;
-        public Mass_Send SelectedMass_Send
+        private Letter selectedLetter;
+        public Letter SelectedLetter
         {
             get 
             { 
-                return selectedMass_Send; 
+                return selectedLetter; 
             }
             set
             {
-                selectedMass_Send = value;
-                OnPropertyChanged("selectedMass_Send");
+                selectedLetter = value;
+                OnPropertyChanged("selectedLetter");
+            }
+        }
+        private Email selectionSenderEmail;
+        public Email SelectionSenderEmail
+        {
+            get
+            {
+                return selectionSenderEmail;
+            }
+            set
+            {
+                selectionSenderEmail = value;
+                OnPropertyChanged("selectionSenderEmail");
             }
         }
         private TabItem selectedTab;
@@ -62,7 +75,7 @@ namespace WpfTestMailSender
             set
             {
                 selectedTab = value;
-                OnPropertyChanged("selectedMass_Send");
+                OnPropertyChanged("selectedLetter");
             }
         }
         private string log;
@@ -102,9 +115,7 @@ namespace WpfTestMailSender
 
         public VMMailSender()
         {
-            Letter = new Letter();
             Settings = new Settings();
-            this.ModelMailSender = new ModelMailSender();
             Emails = ModelMailSender.GetEmails();
         }
         #region Commands
@@ -123,18 +134,12 @@ namespace WpfTestMailSender
                 if (obj is System.Windows.Controls.PasswordBox pass)
                 {
                     Settings.Password = pass.Password;
+                    EmailSendServiceClass.Send(Letters, Settings);
                 }
-                if (SelectedTab.Name == "TabIMain")
+                else
                 {
-                    EmailSendServiceClass.Send(Letter, Settings);
+                    MessageBox.Show("Отсутствуют данные пароля");
                 }
-                else if(SelectedTab.Name == "TabIMassSend")
-                {
-                    Letter.MassSend = true;
-                    Letter.RecipientAdressList = RecipientList.Select<Mass_Send,string>(c => c.Email.Adress).ToList<string>();
-                    EmailSendServiceClass.Send(Letter, Settings);
-                }
-                
             }
             catch (Exception ex)
             {
@@ -293,7 +298,21 @@ namespace WpfTestMailSender
         }
         private void AddRecipientMethod(Object obj)
         {
-            RecipientList.Add(new Mass_Send() { });
+            Letters.Add(new Letter() { });
+        }
+        #endregion
+        #region RemoveRecipient
+        private MyCommands removeRecipient;
+        public MyCommands RemoveRecipient
+        {
+            get
+            {
+                return removeRecipient ?? (removeRecipient = new MyCommands(RemoveRecipientMethod));
+            }
+        }
+        private void RemoveRecipientMethod(Object obj)
+        {
+            Letters.Remove(SelectedLetter);
         }
         #endregion
         #region SelectionChangedEmailCB
@@ -308,9 +327,8 @@ namespace WpfTestMailSender
         private void selectionChangedEmailCBEvent(Object obj)
         {
             if (obj is Email email)
-            {
-                SelectedMass_Send.Email = email;
-                //SelectedMass_Send.Email.Adress = email.Adress;
+            {//при помещении данных в БД если не создать новый объект Email то ругается
+                SelectedLetter.RecipientEmail = new Email { Id = email.Id, Adress = email.Adress, Name = email.Name };
             }
         }
         #endregion
@@ -325,24 +343,29 @@ namespace WpfTestMailSender
         }
         private void SelectedDataChangedMethod(Object obj)
         {
-            if (obj is DatePicker && SelectedMass_Send != null)
+            if (obj is DatePicker && SelectedLetter != null)
             {
-                SelectedMass_Send.Date_Send = (DateTime)((DatePicker)obj).SelectedDate;
+                SelectedLetter.Date_Send = (DateTime)((DatePicker)obj).SelectedDate;
             }
         }
         #endregion
-        #region AddMassSendsToPlane
-        private MyCommands addMassSendsToPlane;
-        public MyCommands AddMassSendsToPlane
+        #region AddLettersToPlane
+        private MyCommands addLettersToPlane;
+        public MyCommands AddLettersToPlane
         {
             get
             {
-                return addMassSendsToPlane ?? (addMassSendsToPlane = new MyCommands(AddMassSendsToPlaneMethod));
+                return addLettersToPlane ?? (addLettersToPlane = new MyCommands(AddLettersToPlaneMethod));
             }
         }
-        private void AddMassSendsToPlaneMethod(Object obj)
+        private void AddLettersToPlaneMethod(Object obj)
         {
-            ModelMailSender.InsertToMass_Send(RecipientList, Message);
+            if (SelectionSenderEmail == null)
+            {
+                MessageBox.Show("Не указан отправитель");
+                return;
+            }
+            ModelMailSender.InsertToLetter(Letters, Message,SelectionSenderEmail);
         }
         #endregion
         #endregion
