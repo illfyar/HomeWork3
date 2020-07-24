@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WpfTestMailSender
@@ -13,13 +14,17 @@ namespace WpfTestMailSender
     {
         public static void Send(ObservableCollection<Letter> letters, Settings settings)
         {
-            foreach (Letter letter in letters)
+            Thread thread = new Thread(() =>
             {
-                MailMessage mailMessage = GetMailMessage(letter);
-                mailMessage.IsBodyHtml = false;
-                SmtpClient smtpClient = GetSmtpClient(settings);
-                //smtpClient.Send(mailMessage); отправка не работает, порты у провайдера закрыты
+                foreach (Letter letter in letters)
+                {
+                    MailMessage mailMessage = GetMailMessage(letter);
+                    mailMessage.IsBodyHtml = false;
+                    SmtpClient smtpClient = GetSmtpClient(settings);
+                    //smtpClient.Send(mailMessage); отправка не работает, порты у провайдера закрыты
                 }
+            });
+            thread.Start();
         }
         private static MailMessage GetMailMessage(Letter letter)
         {

@@ -132,7 +132,7 @@
                         <TextBox x:Name="TBSubject" Grid.Column="1" Grid.Row="1" Style="{StaticResource TextBoxStyle}"
                                  Text="{Binding Message.subject, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </Grid>
-                    <TextBox Name ="TBBodyMessageLetters" Text="{Binding Message.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Name ="TBBodyMessageLetters" Text="{Binding Message.text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          Grid.Row="3" Style="{StaticResource TextBoxStyle}" Height="auto" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>

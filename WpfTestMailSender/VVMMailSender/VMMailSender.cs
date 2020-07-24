@@ -134,7 +134,10 @@ namespace WpfTestMailSender
                 if (obj is System.Windows.Controls.PasswordBox pass)
                 {
                     Settings.Password = pass.Password;
-                    EmailSendServiceClass.Send(Letters, Settings);
+                    if (FillLetters())
+                    {
+                        EmailSendServiceClass.Send(Letters, Settings);
+                    }
                 }
                 else
                 {
@@ -144,7 +147,9 @@ namespace WpfTestMailSender
             catch (Exception ex)
             {
                 Log = ex.Message + Environment.NewLine + ex.InnerException;
-            }            
+                return;
+            }
+            Log = "Письма отправлены";
         }
         #endregion
         #region Save
@@ -360,16 +365,30 @@ namespace WpfTestMailSender
         }
         private void AddLettersToPlaneMethod(Object obj)
         {
+            if (FillLetters())
+            {
+                ModelMailSender.InsertToLetter(Letters, Message, SelectionSenderEmail);
+            }                        
+        }
+        #endregion
+        #region ServiceFunctionality
+        private bool FillLetters()
+        {
             if (SelectionSenderEmail == null)
             {
                 MessageBox.Show("Не указан отправитель");
-                return;
+                return false;
             }
-            ModelMailSender.InsertToLetter(Letters, Message,SelectionSenderEmail);
+            foreach (var item in Letters)
+            {
+                item.SenderEmail = selectionSenderEmail;
+                item.Message = Message;
+            }
+            return true;
         }
-        #endregion
-        #endregion
-        public event PropertyChangedEventHandler PropertyChanged;
+    #endregion
+    #endregion
+    public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             if (PropertyChanged != null)
