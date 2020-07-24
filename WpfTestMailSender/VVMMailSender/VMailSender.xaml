@@ -87,9 +87,8 @@
                                 <DataGridTemplateColumn.CellEditingTemplate>
                                     <DataTemplate>
                                         <ComboBox x:Name="CBAdressLetters" 
-                                            Text="{Binding RecipientEmail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                            Text="{Binding RecipientEmail.Name,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" 
                                             DisplayMemberPath="Name"
-                                            IsEditable="True"
                                             ItemsSource="{Binding Path=DataContext.Emails, 
                                             RelativeSource={RelativeSource AncestorType=DataGrid}}">
                                             <i:Interaction.Triggers>

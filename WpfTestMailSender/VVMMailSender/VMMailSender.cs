@@ -334,6 +334,9 @@ namespace WpfTestMailSender
             if (obj is Email email)
             {//при помещении данных в БД если не создать новый объект Email то ругается
                 SelectedLetter.RecipientEmail = new Email { Id = email.Id, Adress = email.Adress, Name = email.Name };
+                //SelectedLetter.Message = new Message();
+                //SelectedLetter.SenderEmail = new Email();
+                //SelectedLetter.Date_Send = default;
             }
         }
         #endregion

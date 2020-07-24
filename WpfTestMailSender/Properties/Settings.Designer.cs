@@ -26,44 +26,11 @@ namespace WpfTestMailSender.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MailsAndSenders;Integrated Sec" +
-            "urity=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\MailsAndSende" +
+            "rs.mdf;Initial Catalog=MailsAndSenders;Integrated Security=True")]
         public string MailsAndSendersConnectionString {
             get {
                 return ((string)(this["MailsAndSendersConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|MailsAndSender" +
-            "s.mdf;Initial Catalog=MailsAndSenders;Integrated Security=True")]
-        public string MailsAndSendersConnectionString1 {
-            get {
-                return ((string)(this["MailsAndSendersConnectionString1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\bin\\Debug\\Mai" +
-            "lsAndSenders.mdf;Initial Catalog=MailsAndSenders;Integrated Security=True")]
-        public string MailsAndSendersConnectionString2 {
-            get {
-                return ((string)(this["MailsAndSendersConnectionString2"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=MailsAndSenders;Integrated Sec" +
-            "urity=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False")]
-        public string MailsAndSendersConnectionString3 {
-            get {
-                return ((string)(this["MailsAndSendersConnectionString3"]));
             }
         }
     }

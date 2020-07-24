@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/clock.png")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("mailsandsenders.mdf")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("mailsandsenders_log.ldf")]
 
 

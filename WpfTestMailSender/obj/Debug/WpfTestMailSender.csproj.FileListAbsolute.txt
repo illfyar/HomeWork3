@@ -68,3 +68,8 @@ D:\cSharp\HomeWork3\WpfTestMailSender\bin\Debug\ro\Xceed.Wpf.AvalonDock.resource
 D:\cSharp\HomeWork3\WpfTestMailSender\bin\Debug\ru\Xceed.Wpf.AvalonDock.resources.dll
 D:\cSharp\HomeWork3\WpfTestMailSender\bin\Debug\sv\Xceed.Wpf.AvalonDock.resources.dll
 D:\cSharp\HomeWork3\WpfTestMailSender\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
+D:\cSharp\HomeWork3\WpfTestMailSender\obj\Debug\WpfTestMailSender_Content.g.cs
+D:\cSharp\HomeWork3\WpfTestMailSender\bin\Debug\EntityFramework.dll
+D:\cSharp\HomeWork3\WpfTestMailSender\bin\Debug\EntityFramework.SqlServer.dll
+D:\cSharp\HomeWork3\WpfTestMailSender\bin\Debug\EntityFramework.xml
+D:\cSharp\HomeWork3\WpfTestMailSender\bin\Debug\EntityFramework.SqlServer.xml
